@@ -10,15 +10,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
           version: '6.5.3'
           arch: 'win64_msvc2019_64'
-          # В Qt 6 базовые модули (core, gui, widgets) ставятся автоматически.
-          # Нам нужны только дополнительные.
-          modules: 'qtopengl qtsql'
-          setup-python: 'true'
+          # В Qt 6.5.3 (msvc2019_64) базовые модули (Sql, OpenGLWidgets) 
+          # включены в стандартную установку. Указываем пустой список, 
+          # чтобы избежать ошибок поиска XML.
+          modules: ''
+          setup-python: 'false'
 
       - name: Configure CMake
         run: |
