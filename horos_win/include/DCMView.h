@@ -38,6 +38,7 @@ protected:
 private:
   void setupShaders();
   void updateTexture();
+  void loadCurrentImage();
 
   QOpenGLShaderProgram *m_program = nullptr;
   QOpenGLTexture *m_texture = nullptr;

@@ -1,4 +1,5 @@
 #include "DCMView.h"
+#include "DicomReader.h"
 #include <QMouseEvent>
 #include <QOpenGLBuffer>
 #include <QOpenGLTexture>
@@ -310,21 +311,30 @@ void DCMView::wheelEvent(QWheelEvent *event) {
 void DCMView::setImageStack(const QStringList &files) {
   m_imageFiles = files;
   m_currentIndex = 0;
-  // In real app, trigger loading of m_imageFiles[0]
-  update();
+  loadCurrentImage();
 }
 
 void DCMView::nextImage() {
   if (m_currentIndex < m_imageFiles.size() - 1) {
     m_currentIndex++;
-    update();
+    loadCurrentImage();
   }
 }
 
 void DCMView::prevImage() {
   if (m_currentIndex > 0) {
     m_currentIndex--;
-    update();
+    loadCurrentImage();
+  }
+}
+
+void DCMView::loadCurrentImage() {
+  if (m_currentIndex >= 0 && m_currentIndex < m_imageFiles.size()) {
+    DicomImage img = DicomReader::load(m_imageFiles[m_currentIndex]);
+    if (img.valid) {
+      setPixelData(img.pixelData, img.width, img.height);
+      setWindowLevel(img.windowWidth, img.windowLevel);
+    }
   }
 }
 
