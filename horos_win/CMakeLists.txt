@@ -86,12 +86,11 @@ if(WIN32)
         WIN32_EXECUTABLE ON
     )
     
-    # Deployment using windeployqt
-    set(WINDEPLOYQT_COMMAND "windeployqt")
-    add_custom_command(TARGET HorosWin POST_BUILD
-        COMMAND ${WINDEPLOYQT_COMMAND} "$<TARGET_FILE:HorosWin>"
-        COMMENT "Running windeployqt..."
-    )
+    # Deployment using windeployqt during INSTALL
+    # This ensures CPack picks up all DLLs and plugins
+    install(CODE "
+        execute_process(COMMAND windeployqt --no-compiler-runtime \"\${CMAKE_INSTALL_PREFIX}/HorosWin.exe\")
+    ")
 endif()
 
 # CPack Configuration
