@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(HorosWin VERSION 0.1.0 LANGUAGES CXX)
+include(InstallRequiredSystemLibraries)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -102,10 +103,18 @@ set(CPACK_PACKAGE_VERSION "1.0.0")
 if(WIN32)
     set(CPACK_GENERATOR "NSIS;ZIP")
     set(CPACK_NSIS_DISPLAY_NAME "Horos for Windows")
+    set(CPACK_NSIS_PACKAGE_NAME "Horos for Windows")
+    set(CPACK_NSIS_HELP_LINK "http://horosproject.org")
+    
+    # Shortcuts
+    set(CPACK_NSIS_MENU_LINKS "HorosWin.exe" "Horos for Windows")
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA "  CreateShortCut '$DESKTOP\\Horos for Windows.lnk' '$INSTDIR\\HorosWin.exe'")
+    set(CPACK_NSIS_DELETE_ICONS_EXTRA "  Delete '$DESKTOP\\Horos for Windows.lnk'")
 elseif(APPLE)
     set(CPACK_GENERATOR "DragNDrop")
     set(CPACK_PACKAGE_NAME "HorosMac")
 endif()
 
 set(CPACK_NSIS_MODIFY_PATH ON)
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "HorosWindows")
 include(CPack)
