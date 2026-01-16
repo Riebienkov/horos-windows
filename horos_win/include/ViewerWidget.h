@@ -9,6 +9,7 @@ class ViewerWidget : public QWidget {
 
 public:
   explicit ViewerWidget(const QString &studyUID, QWidget *parent = nullptr);
+  DCMView *view() const { return m_view; }
 
 private:
   void setupUI();

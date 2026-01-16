@@ -2,6 +2,7 @@
 #include "DatabaseManager.h"
 #include <QDebug>
 #include <QDirIterator>
+#include <QRandomGenerator>
 #include <QThread>
 
 // Note: In a real implementation, we would include DCMTK headers here:
@@ -47,7 +48,8 @@ void DICOMScanner::processFile(const QString &filePath) {
   // We'll use the filename as a mock UID for demonstration in the table
   QString mockStudyUID = "MOCK_STUDY_" + QFileInfo(filePath).baseName();
   QString mockPatientName = "Patient_" + QFileInfo(filePath).baseName();
-  QString mockID = "ID_" + QString::number(qrand() % 1000);
+  QString mockID =
+      "ID_" + QString::number(QRandomGenerator::global()->generate() % 1000);
   QString mockDate = "2024-01-16";
 
   DatabaseManager::instance().addStudy(mockStudyUID, mockPatientName, mockID,

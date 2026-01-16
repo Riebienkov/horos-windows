@@ -3,16 +3,17 @@
 
 #include <QMainWindow>
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
+class MainWindow : public QMainWindow {
+  Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+  MainWindow(QWidget *parent = nullptr);
+  ~MainWindow();
 
 private:
-    void setupUI();
+  void setupUI();
+  class BrowserWidget *m_browser;
+  class AutoImporter *m_autoImporter;
 };
 
 #endif // MAINWINDOW_H
