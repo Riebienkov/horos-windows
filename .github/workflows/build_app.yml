@@ -10,20 +10,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: '6.6.2'
+          version: '6.5.3'
           arch: 'win64_msvc2019_64'
-          # Используем минимальный набор модулей для стабильности
-          # qtbase и qtopengl обычно достаточно для QtWidgets + OpenGL
-          modules: 'qtbase qtopengl qtsvg'
-          setup-python: 'false'
+          # В Qt 6 базовые модули (core, gui, widgets) ставятся автоматически.
+          # Нам нужны только дополнительные.
+          modules: 'qtopengl qtsql'
+          setup-python: 'true'
 
       - name: Configure CMake
         run: |
