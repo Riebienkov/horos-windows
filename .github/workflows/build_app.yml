@@ -5,34 +5,37 @@ on:
 
 jobs:
   build-windows:
-    runs-on: windows-2022
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Install Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Install Qt (Manual aqtinstall)
+      - name: Install Qt
         run: |
           python -m pip install --upgrade pip
-          python -m pip install aqtinstall
-          python -m aqt install-qt windows desktop 6.5.3 win64_msvc2019_64 -m qtopenglwidgets qtsql
-          echo "Qt6_DIR=$PWD/Qt/6.5.3/msvc2019_64/lib/cmake/Qt6" >> $GITHUB_ENV
-          echo "$PWD/Qt/6.5.3/msvc2019_64/bin" >> $GITHUB_PATH
-        shell: bash
+          pip install aqtinstall
+          python -m aqt install-qt windows desktop 6.5.3 win64_msvc2019_64 -m qtopenglwidgets qtsql --outputdir C:\Qt
+        shell: cmd
 
       - name: Configure CMake
-        run: cmake -B build -S horos_win -G "Visual Studio 17 2022" -A x64
+        run: |
+          cmake -B build -S horos_win -G "Visual Studio 16 2019" -A x64 -DQt6_DIR=C:\Qt\6.5.3\msvc2019_64\lib\cmake\Qt6
+        shell: cmd
 
       - name: Build
-        run: cmake --build build --config Release
+        run: |
+          cmake --build build --config Release
+        shell: cmd
 
       - name: Create Installer
         run: |
           cd build
           cpack -G NSIS
+        shell: cmd
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
