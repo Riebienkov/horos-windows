@@ -1,4 +1,4 @@
-name: Windows & macOS Build
+name: Windows Build Only
 on:
   push:
     branches: [ main, master ]
@@ -9,18 +9,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.9'
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
           version: '6.5.3'
           arch: 'win64_msvc2019_64'
           modules: 'qtopenglwidgets qtsql'
-          setup-python: 'false'
+          # Disabling host/target might help avoid some logic branches in the action
+          # that are failing due to python environment issues.
+          setup-python: 'true' 
 
       - name: Configure CMake
         run: cmake -B build -S horos_win -G "Visual Studio 17 2022" -A x64
@@ -38,37 +35,3 @@ jobs:
         with:
           name: HorosWin-Installer
           path: build/*.exe
-
-  build-macos:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.9'
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: '6.5.3'
-          modules: 'qtopenglwidgets qtsql'
-          setup-python: 'false'
-
-      - name: Configure CMake
-        run: cmake -B build -S horos_win
-
-      - name: Build
-        run: cmake --build build --config Release
-
-      - name: Create DMG
-        run: |
-          cd build
-          cpack -G DragNDrop
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: HorosMac-DMG
-          path: build/*.dmg
