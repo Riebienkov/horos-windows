@@ -10,39 +10,25 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Python 3.12
-        uses: actions/setup-python@v5
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
         with:
-          python-version: '3.12'
+          version: '6.5.3'
+          arch: 'win64_msvc2019_64'
+          modules: 'qtopenglwidgets qtsql'
+          setup-python: 'false' # Используем системный Python GHA, чтобы избежать конфликтов
 
-      - name: Install Qt (Robust Manual)
+      - name: Build Application
         run: |
-          python -m pip install --upgrade pip
-          pip install aqtinstall==3.1.1
-          # Debug output for environment info
-          python --version
-          pip --version
-          # Install Qt with debug logging enabled
-          aqt install-qt windows desktop 6.5.3 win64_msvc2019_64 -m qtopenglwidgets qtsql --outputdir C:/Qt
-        shell: bash
-        env:
-          AQT_LOG_LEVEL: "DEBUG"
-
-      - name: Configure CMake
-        run: |
-          cmake -B build -S horos_win -G "Visual Studio 17 2022" -A x64 -DQt6_DIR="C:/Qt/6.5.3/msvc2019_64/lib/cmake/Qt6"
-        shell: bash
-
-      - name: Build
-        run: |
+          cmake -B build -S horos_win -G "Visual Studio 17 2022" -A x64
           cmake --build build --config Release
-        shell: bash
+        shell: cmd
 
-      - name: Create Installer (NSIS)
+      - name: Create Installer
         run: |
           cd build
           cpack -G NSIS
-        shell: bash
+        shell: cmd
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
