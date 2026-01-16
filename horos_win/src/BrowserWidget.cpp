@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QHeaderView>
 #include <QSqlError>
+#include <QSqlQuery>
 #include <QVBoxLayout>
 
 BrowserWidget::BrowserWidget(QWidget *parent) : QWidget(parent) { setupUI(); }
@@ -25,21 +26,32 @@ void BrowserWidget::setupUI() {
   m_studyTree->header()->setSectionResizeMode(QHeaderView::Stretch);
   m_studyTree->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-  connect(m_studyTree, &QTreeView::doubleClicked,
-          [this](const QModelIndex &index) {
-            QString studyUID =
-                m_model->data(m_model->index(index.row(), 0)).toString();
-            ViewerWidget *viewer = new ViewerWidget(studyUID);
-            viewer->setWindowTitle("Horos Viewer - " + studyUID);
-            viewer->resize(800, 800);
-            // For "minimim" demo, we just simulate getting a list of images
-            QStringList dummyImages;
-            for (int i = 0; i < 50; ++i)
-              dummyImages << QString("image_%1.dcm").arg(i);
+  connect(
+      m_studyTree, &QTreeView::doubleClicked, [this](const QModelIndex &index) {
+        QString studyUID =
+            m_model->data(m_model->index(index.row(), 0)).toString();
+        ViewerWidget *viewer = new ViewerWidget(studyUID);
+        viewer->setWindowTitle("Horos Viewer - " + studyUID);
+        viewer->resize(800, 800);
 
-            viewer->view()->setImageStack(dummyImages);
-            viewer->show();
-          });
+        // Fetch real image paths for this study
+        QStringList realImages;
+        QSqlQuery query;
+        query.prepare(
+            "SELECT pathString FROM images WHERE seriesInstanceUID LIKE :uid");
+        query.bindValue(":uid",
+                        studyUID + "%"); // Match our mock series pattern
+        if (query.exec()) {
+          while (query.next()) {
+            realImages << query.value(0).toString();
+          }
+        }
+
+        if (!realImages.isEmpty()) {
+          viewer->view()->setImageStack(realImages);
+        }
+        viewer->show();
+      });
 
   layout->addWidget(m_studyTree);
 }

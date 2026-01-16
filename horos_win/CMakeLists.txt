@@ -108,8 +108,8 @@ if(WIN32)
     
     # Shortcuts
     set(CPACK_NSIS_MENU_LINKS "HorosWin.exe" "Horos for Windows")
-    set(CPACK_NSIS_CREATE_ICONS_EXTRA "  CreateShortCut '$DESKTOP\\Horos for Windows.lnk' '$INSTDIR\\HorosWin.exe'")
-    set(CPACK_NSIS_DELETE_ICONS_EXTRA "  Delete '$DESKTOP\\Horos for Windows.lnk'")
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA "  CreateShortCut '$DESKTOP\\\\Horos for Windows.lnk' '$INSTDIR\\\\HorosWin.exe'")
+    set(CPACK_NSIS_DELETE_ICONS_EXTRA "  Delete '$DESKTOP\\\\Horos for Windows.lnk'")
 elseif(APPLE)
     set(CPACK_GENERATOR "DragNDrop")
     set(CPACK_PACKAGE_NAME "HorosMac")
