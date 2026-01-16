@@ -11,8 +11,8 @@ class AutoImporter : public QObject {
 public:
   explicit AutoImporter(QObject *parent = nullptr);
 
-  void setWatchDirectory(const QString &path);
-  void start();
+  void setWatchFolder(const QString &path);
+  void startWatching();
   void stop();
 
 signals:

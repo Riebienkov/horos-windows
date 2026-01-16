@@ -13,7 +13,7 @@ AutoImporter::AutoImporter(QObject *parent) : QObject(parent) {
   connect(m_processTimer, &QTimer::timeout, this, &AutoImporter::processQueue);
 }
 
-void AutoImporter::setWatchDirectory(const QString &path) {
+void AutoImporter::setWatchFolder(const QString &path) {
   m_watchPath = path;
   if (m_watcher->directories().contains(path))
     return;
@@ -43,7 +43,7 @@ void AutoImporter::processQueue() {
   emit logMessage("Auto-Import: Scan complete.");
 }
 
-void AutoImporter::start() {
+void AutoImporter::startWatching() {
   if (!m_watchPath.isEmpty())
     m_watcher->addPath(m_watchPath);
 }
