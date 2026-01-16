@@ -26,6 +26,10 @@ jobs:
           modules: ''
           setup-python: 'false'
 
+      - name: Install NSIS
+        run: choco install nsis -y
+        shell: cmd
+
       - name: Configure CMake
         run: |
           mkdir build
