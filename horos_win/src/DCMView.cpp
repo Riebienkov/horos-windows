@@ -1,6 +1,9 @@
 #include "DCMView.h"
+#include <QMouseEvent>
 #include <QOpenGLBuffer>
 #include <QOpenGLTexture>
+#include <QPainter>
+#include <QWheelEvent>
 
 DCMView::DCMView(QWidget *parent) : QOpenGLWidget(parent) {}
 
