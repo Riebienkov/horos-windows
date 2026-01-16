@@ -11,19 +11,23 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: miurahr/setup-qt@v3
+        uses: jurplel/install-qt-action@v3
         with:
-          version: '6.5.3'
+          version: '6.6.0'
           arch: 'win64_msvc2019_64'
-          modules: 'qtopenglwidgets qtsql'
+          modules: 'qtopengl qtsql' # Используем базовые имена модулей
 
       - name: Configure CMake
-        run: cmake -B build -S horos_win -G "Visual Studio 17 2022" -A x64
+        run: |
+          mkdir build
+          cmake -B build -S horos_win -G "Visual Studio 17 2022" -A x64
+        shell: cmd
 
-      - name: Build
+      - name: Build Application
         run: cmake --build build --config Release
+        shell: cmd
 
-      - name: Create Installer (NSIS)
+      - name: Create Installer
         run: |
           cd build
           cpack -G NSIS
