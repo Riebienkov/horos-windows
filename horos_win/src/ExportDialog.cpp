@@ -36,9 +36,8 @@ ExportDialog::ExportDialog(const QString &studyUID, QWidget *parent)
   layout->addLayout(btnLayout);
 
   connect(browseBtn, &QPushButton::clicked, this, &ExportDialog::onBrowse);
-  connect(okBtn, &QPushButton::accepted, this, &QDialog::accept);
   connect(cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
-  connect(okBtn, &QPushButton::clicked, [this]() { accept(); });
+  connect(okBtn, &QPushButton::clicked, this, &QDialog::accept);
 }
 
 void ExportDialog::onBrowse() {

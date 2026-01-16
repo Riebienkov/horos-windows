@@ -16,7 +16,7 @@
 #include <QPointF>
 #include <QString>
 
-enum class ROIType { Ruler, Oval, Rectangle };
+enum class ROIType { Ruler, Oval, Rectangle, Angle };
 
 struct ROIStats {
   double mean = 0.0;
